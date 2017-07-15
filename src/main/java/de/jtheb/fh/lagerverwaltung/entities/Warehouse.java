@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Warehouse {
 
+    public static final int SPACE_BETWEEN_SHELVES = 200;
+
     private List<Shelf> shelves;
 
     public Warehouse() {

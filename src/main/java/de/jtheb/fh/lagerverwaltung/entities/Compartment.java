@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Compartment {
 
-    private int height = 200;
-    private int width = 200;
-    private int depth = 200;
+    public static final int HEIGHT = 200;
+    public static final int WIDTH = 200;
+    public static final int DEPTH = 200;
 
     List<Item> items = new ArrayList<>();
 
@@ -31,27 +31,4 @@ public class Compartment {
         this.items = items;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(final int height) {
-        this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(final int width) {
-        this.width = width;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-
-    public void setDepth(final int depth) {
-        this.depth = depth;
-    }
 }
