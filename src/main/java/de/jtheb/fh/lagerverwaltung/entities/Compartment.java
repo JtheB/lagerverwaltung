@@ -9,7 +9,7 @@ public class Compartment {
     public static final int WIDTH = 200;
     public static final int DEPTH = 200;
 
-    List<Item> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
     public Compartment() {
         this.items = new ArrayList<>();
