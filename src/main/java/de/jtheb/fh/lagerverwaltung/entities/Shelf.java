@@ -15,6 +15,19 @@ public class Shelf {
         this.compartments = compartments;
     }
 
+    public boolean itemFits(Item item) {
+        // iterate over compartments
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public boolean isFull() {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public Compartment findFittingCompartment(Item item) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
     void add(final Compartment compartment) {
         this.compartments.add(compartment);
     }

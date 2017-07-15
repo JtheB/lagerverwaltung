@@ -15,6 +15,14 @@ public class Compartment {
         this.items = new ArrayList<>();
     }
 
+    public boolean itemFits(Item item) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public boolean isFull() {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
     public Compartment(final List<Item> items) {
         this.items = items;
     }
