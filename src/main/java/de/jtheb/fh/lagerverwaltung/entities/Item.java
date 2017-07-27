@@ -46,4 +46,6 @@ public class Item {
     public void setDepth(final int depth) {
         this.depth = depth;
     }
+
+    public int getVolume() {return depth*width*height; }
 }

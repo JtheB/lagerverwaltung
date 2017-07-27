@@ -3,29 +3,42 @@ package de.jtheb.fh.lagerverwaltung.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shelf {
+public class Shelf{
+    public static final int COMPARTMENTCOUNT = 100;
 
-    private List<Compartment> compartments;
+    private List<Compartment> compartments = new ArrayList<>();
 
     public Shelf() {
         this.compartments = new ArrayList<>();
     }
 
-    public Shelf(final List<Compartment> compartments) {
-        this.compartments = compartments;
-    }
-
     public boolean itemFits(Item item) {
-        // iterate over compartments
-        throw new UnsupportedOperationException("not implemented");
+        for (Compartment compartment: this.compartments){
+            if (compartment.itemFits(item)){
+                return true;
+                break;
+            }
+        }
+        return false;
     }
 
     public boolean isFull() {
-        throw new UnsupportedOperationException("not implemented");
+        for (Compartment compartment : this.compartments){
+            if (compartment.isFull() == false){
+                return false;
+                break;
+            }
+        }
+        return true;
     }
 
     public Compartment findFittingCompartment(Item item) {
-        throw new UnsupportedOperationException("not implemented");
+        for (Compartment compartment : this.compartments){
+            if (compartment.itemFits(item)) {
+                return compartment;
+            }
+        }
+        throw new UnsupportedOperationException("not implemented"); //TODO ERROR Function/Shelffull
     }
 
     void add(final Compartment compartment) {
@@ -38,5 +51,11 @@ public class Shelf {
 
     public void setCompartments(final List<Compartment> compartments) {
         this.compartments = compartments;
+    }
+
+    public void initiateShelf(final Compartment compartment) {
+        for(int i = 0; i < COMPARTMENTCOUNT; i++) {
+            add(compartment);
+        }
     }
 }
