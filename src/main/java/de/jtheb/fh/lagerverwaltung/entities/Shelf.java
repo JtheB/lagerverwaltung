@@ -15,7 +15,7 @@ public class Shelf {
     public boolean itemFits(Item item) {
         if (!isFull()) {
             for (Compartment compartment : compartments) {
-                if (compartment.itemFitsWithArticleNr(item) || compartment.getArticleNr().equals(null)) {
+                if (compartment.itemFitsWithArticleNr(item) || null == compartment.getArticleNr()) {
                     return true;
                 }
             }
@@ -39,11 +39,11 @@ public class Shelf {
             }
         }
         for (Compartment compartment : compartments) {
-            if (compartment.getArticleNr().equals(null)) {
+            if (null == compartment.getArticleNr()) {
                 return compartment;
             }
         }
-        throw new UnsupportedOperationException("Error - compartements full"); //TODO Correct ERROR Function/Shelffull
+        return null;
     }
 
     void add(final Compartment compartment) {

@@ -38,7 +38,7 @@ public class Warehouse {
                 return shelf.findFittingCompartment(item);
             }
         }
-        throw new UnsupportedOperationException("Error -sShelves are full"); //TODO implement correct ERROR Function
+        return null;
     }
 
     void add(final Shelf shelf) {

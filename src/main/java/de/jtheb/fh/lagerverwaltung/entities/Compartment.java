@@ -9,13 +9,11 @@ public class Compartment {
     public static final int WIDTH = 200;
     public static final int DEPTH = 200;
 
-    private List<Item> items = new ArrayList<>();
+    private List<Item> items;
 
     public Compartment() {
         this.items = new ArrayList<>();
     }
-
-    //public Compartment(final List<Item> items) { this.items = items; }
 
     void add(final Item item) {
         this.items.add(item);
@@ -37,31 +35,33 @@ public class Compartment {
 
         int volume = 0;
         for (Item item : items) {
-            volume += (item.getHeight() * item.getWidth() * item.getDepth());
+            volume += item.getHeight() * item.getWidth() * item.getDepth();
         }
         return volume;
     }
 
+    /** This Method tests for itemFitsVolume and articleNrFits */
     public boolean itemFitsWithArticleNr(Item item) {
-        return (this.articleNrFits(item) && itemFitsVolume(item));
+        return this.articleNrFits(item) && itemFitsVolume(item);
     }
 
     public boolean itemFitsVolume(Item item) {
-        return (this.getVolume() - this.getItemsVolume() - item.getVolume() >= 0);
+        return this.getVolume() - this.getItemsVolume() - item.getVolume() >= 0;
     }
 
     public boolean isFull() {
-        return (this.getVolume() == this.getItemsVolume());
+        return this.getVolume() == this.getItemsVolume();
     }
 
-    public String getArticleNr() { //TODO Check in correct return null
+    public String getArticleNr() {
         for (Item item : items) {
             return item.getArticleNr();
         }
         return null;
     }
 
-    public boolean articleNrFits(Item item) { //Check for identical number.
-        return (this.getArticleNr().equals(item.getArticleNr()));
+    /** articleNrFits tests whether there is an item in Compartment, which has the same articleNr*/
+    public boolean articleNrFits(Item item) {
+        return this.getArticleNr().equals(item.getArticleNr());
     }
 }
