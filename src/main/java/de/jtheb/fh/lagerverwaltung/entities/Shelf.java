@@ -6,16 +6,18 @@ import java.util.List;
 public class Shelf {
     public static final int COMPARTMENTCOUNT = 100;
 
-    private List<Compartment> compartments;
+    private List<Compartment> compartments = new ArrayList<>();
 
     public Shelf() {
         this.compartments = new ArrayList<>();
     }
 
     public boolean itemFits(Item item) {
-        for (Compartment compartment : this.compartments) {
-            if (compartment.itemFits(item)) {
-                return true;
+        if (!isFull()) {
+            for (Compartment compartment : compartments) {
+                if (compartment.itemFitsWithArticleNr(item) || compartment.getArticleNr().equals(null)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -23,7 +25,7 @@ public class Shelf {
 
     public boolean isFull() {
         for (Compartment compartment : this.compartments) {
-            if (compartment.isFull() == false) {
+            if (!compartment.isFull()) {
                 return false;
             }
         }
@@ -32,11 +34,16 @@ public class Shelf {
 
     public Compartment findFittingCompartment(Item item) {
         for (Compartment compartment : this.compartments) {
-            if (compartment.itemFits(item)) {
+            if (compartment.itemFitsWithArticleNr(item)) {
                 return compartment;
             }
         }
-        throw new UnsupportedOperationException("not implemented"); //TODO ERROR Function/Shelffull
+        for (Compartment compartment : compartments) {
+            if (compartment.getArticleNr().equals(null)) {
+                return compartment;
+            }
+        }
+        throw new UnsupportedOperationException("Error - compartements full"); //TODO Correct ERROR Function/Shelffull
     }
 
     void add(final Compartment compartment) {

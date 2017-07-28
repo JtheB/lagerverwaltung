@@ -14,21 +14,31 @@ public class Warehouse {
         this.shelves = new ArrayList<>();
     }
 
-    public boolean itemFits(Item item) { //TODO Fix the items with an ID and add that to all itemFits
-        for (Shelf shelf : shelves) {
-            if (shelf.itemFits(item)) {
-                return true;
+    public boolean itemFits(Item item) {
+        if (!isFull()) {
+            for (Shelf shelf : shelves) {
+                shelf.itemFits(item);
             }
         }
-        return false;
+        return
     }
 
     public boolean isFull() {
-        throw new UnsupportedOperationException("not implemented");
+        for (Shelf shelf : shelves) {
+            if (!shelf.isFull()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Compartment findFittingCompartment(Item item) {
-        throw new UnsupportedOperationException("not implemented");
+        if (!isFull()) {
+            for (Shelf shelf : shelves) {
+                return shelf.findFittingCompartment(item);
+            }
+        }
+        throw new UnsupportedOperationException("Error -sShelves are full"); //TODO implement correct ERROR Function
     }
 
     void add(final Shelf shelf) {

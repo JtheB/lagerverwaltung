@@ -42,8 +42,11 @@ public class Compartment {
         return volume;
     }
 
-    public boolean itemFits(Item item) {
-        this.getArticleNr();
+    public boolean itemFitsWithArticleNr(Item item) {
+        return (this.articleNrFits(item) && itemFitsVolume(item));
+    }
+
+    public boolean itemFitsVolume(Item item) {
         return (this.getVolume() - this.getItemsVolume() - item.getVolume() >= 0);
     }
 
@@ -51,10 +54,14 @@ public class Compartment {
         return (this.getVolume() == this.getItemsVolume());
     }
 
-    public String getArticleNr() {
+    public String getArticleNr() { //TODO Check in correct return null
         for (Item item : items) {
             return item.getArticleNr();
         }
         return null;
+    }
+
+    public boolean articleNrFits(Item item) { //Check for identical number.
+        return (this.getArticleNr().equals(item.getArticleNr()));
     }
 }
