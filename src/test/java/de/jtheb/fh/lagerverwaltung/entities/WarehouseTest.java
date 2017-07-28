@@ -16,10 +16,11 @@ public class WarehouseTest {
         Warehouse warehouse = new Warehouse();
         final Shelf shelf = new Shelf();
 
-        warehouse.add(shelf);
+        warehouse.initiateShelves(shelf);
 
         List<Shelf> shelves = warehouse.getShelves();
-        assertEquals(1, shelves.size());
+        assertEquals(8, shelves.size());
         assertEquals(shelf, warehouse.getShelves().get(0));
     }
 }
+

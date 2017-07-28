@@ -41,11 +41,11 @@ public class Warehouse {
         return null;
     }
 
-    void add(final Shelf shelf) {
+    public void add(final Shelf shelf) {
         this.shelves.add(shelf);
     }
 
-    List<Shelf> getShelves() {
+    public List<Shelf> getShelves() {
         return shelves;
     }
 

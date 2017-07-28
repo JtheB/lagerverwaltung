@@ -12,9 +12,12 @@ public class CompartmentTest {
         Compartment compartment = new Compartment();
         Item item = new Item();
 
+        item.setArticleNr("0000");
+        compartment.add(item);
         compartment.add(item);
 
-        assertEquals(1, compartment.getItems().size());
+        assertEquals("0000", compartment.getArticleNr());
+        assertEquals(2, compartment.getItems().size());
         assertEquals(item, compartment.getItems().get(0));
     }
 }

@@ -15,7 +15,7 @@ public class Compartment {
         this.items = new ArrayList<>();
     }
 
-    void add(final Item item) {
+    public void add(final Item item) {
         this.items.add(item);
     }
 
@@ -40,7 +40,11 @@ public class Compartment {
         return volume;
     }
 
-    /** This Method tests for itemFitsVolume and articleNrFits */
+    /**
+     * This Method tests for itemFitsVolume and articleNrFits
+     *
+     * @param item is an Item which has an articleID, height, width, depth and a name.
+     */
     public boolean itemFitsWithArticleNr(Item item) {
         return this.articleNrFits(item) && itemFitsVolume(item);
     }
@@ -60,7 +64,11 @@ public class Compartment {
         return null;
     }
 
-    /** articleNrFits tests whether there is an item in Compartment, which has the same articleNr*/
+    /**
+     * articleNrFits tests whether there is an item in Compartment, which has the same articleNr
+     *
+     * @param item is an Item which has an articleID, height, width, depth and a name.
+     */
     public boolean articleNrFits(Item item) {
         return this.getArticleNr().equals(item.getArticleNr());
     }
