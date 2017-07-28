@@ -41,12 +41,14 @@ public class Compartment {
     }
 
     /**
-     * This Method tests for itemFitsVolume and articleNrFits
+     * This Method tests for itemFitsVolume and itemFits
+     * itemFits tests whether there is an item in Compartment, which fits with articleNr or if the compartment is empty (==null)
+     * itemFitsVolume tests the obvious
      *
      * @param item is an Item which has an articleID, height, width, depth and a name.
      */
     public boolean itemFitsWithArticleNr(Item item) {
-        return this.articleNrFits(item) && itemFitsVolume(item);
+        return this.itemFits(item) && itemFitsVolume(item);
     }
 
     public boolean itemFitsVolume(Item item) {
@@ -65,11 +67,16 @@ public class Compartment {
     }
 
     /**
-     * articleNrFits tests whether there is an item in Compartment, which has the same articleNr
+     * itemFits tests whether there is an item in Compartment, which has the same articleNr
+     * or if there is an empty Compartment to fit in (this.getArticleNr() == null)
      *
      * @param item is an Item which has an articleID, height, width, depth and a name.
      */
-    public boolean articleNrFits(Item item) {
-        return this.getArticleNr().equals(item.getArticleNr());
+    public boolean itemFits(Item item) {
+        if (null == this.getArticleNr()) {
+            return true;
+        } else {
+            return this.getArticleNr().equals(item.getArticleNr());
+        }
     }
 }
