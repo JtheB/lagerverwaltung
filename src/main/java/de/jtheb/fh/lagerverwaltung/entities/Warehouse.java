@@ -17,10 +17,10 @@ public class Warehouse {
     public boolean itemFits(Item item) {
         if (!isFull()) {
             for (Shelf shelf : shelves) {
-                shelf.itemFits(item);
+                return shelf.itemFits(item);
             }
         }
-        return
+        return false;
     }
 
     public boolean isFull() {
