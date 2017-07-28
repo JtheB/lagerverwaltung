@@ -8,17 +8,16 @@ public class Warehouse {
     public static final int SHELFCOUNT = 8;
     public static final int SPACE_BETWEEN_SHELVES = 200;
 
-    private List<Shelf> shelves = new ArrayList<>();
+    private List<Shelf> shelves;
 
-    public Warehouse(final List<Shelf> shelves) {
-        this.shelves = shelves;
+    public Warehouse() {
+        this.shelves = new ArrayList<>();
     }
 
     public boolean itemFits(Item item) { //TODO Fix the items with an ID and add that to all itemFits
-        for (Shelf shelf: shelves) {
+        for (Shelf shelf : shelves) {
             if (shelf.itemFits(item)) {
                 return true;
-                break;
             }
         }
         return false;
@@ -44,8 +43,8 @@ public class Warehouse {
         this.shelves = shelves;
     }
 
-    public void initiateShelves(final Shelf shelf){
-        for(int i = 0; i < SHELFCOUNT; i++){
+    public void initiateShelves(final Shelf shelf) {
+        for (int i = 0; i < SHELFCOUNT; i++) {
             add(shelf);
         }
     }

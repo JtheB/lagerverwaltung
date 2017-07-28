@@ -1,18 +1,18 @@
 package de.jtheb.fh.lagerverwaltung.entities;
 
 public class Item {
-    private String id;
+    private String articleNr;
     private String name;
     private int height;
     private int width;
     private int depth;
 
-    public String getId() {
-        return id;
+    public String getArticleNr() {
+        return articleNr;
     }
 
-    public void setId(final String id) {
-        this.id = id;
+    public void setArticleNr(final String articleNr) {
+        this.articleNr = articleNr;
     }
 
     public String getName() {
@@ -47,5 +47,7 @@ public class Item {
         this.depth = depth;
     }
 
-    public int getVolume() {return depth*width*height; }
+    public int getVolume() {
+        return depth * width * height;
+    }
 }

@@ -3,37 +3,35 @@ package de.jtheb.fh.lagerverwaltung.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shelf{
+public class Shelf {
     public static final int COMPARTMENTCOUNT = 100;
 
-    private List<Compartment> compartments = new ArrayList<>();
+    private List<Compartment> compartments;
 
     public Shelf() {
         this.compartments = new ArrayList<>();
     }
 
     public boolean itemFits(Item item) {
-        for (Compartment compartment: this.compartments){
-            if (compartment.itemFits(item)){
+        for (Compartment compartment : this.compartments) {
+            if (compartment.itemFits(item)) {
                 return true;
-                break;
             }
         }
         return false;
     }
 
     public boolean isFull() {
-        for (Compartment compartment : this.compartments){
-            if (compartment.isFull() == false){
+        for (Compartment compartment : this.compartments) {
+            if (compartment.isFull() == false) {
                 return false;
-                break;
             }
         }
         return true;
     }
 
     public Compartment findFittingCompartment(Item item) {
-        for (Compartment compartment : this.compartments){
+        for (Compartment compartment : this.compartments) {
             if (compartment.itemFits(item)) {
                 return compartment;
             }
@@ -54,7 +52,7 @@ public class Shelf{
     }
 
     public void initiateShelf(final Compartment compartment) {
-        for(int i = 0; i < COMPARTMENTCOUNT; i++) {
+        for (int i = 0; i < COMPARTMENTCOUNT; i++) {
             add(compartment);
         }
     }
