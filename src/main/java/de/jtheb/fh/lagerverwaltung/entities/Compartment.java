@@ -79,4 +79,11 @@ public class Compartment {
             return this.getArticleNr().equals(item.getArticleNr());
         }
     }
+
+    @Override
+    public String toString() {
+        return "Compartment{" +
+                "items=" + items +
+                '}';
+    }
 }
