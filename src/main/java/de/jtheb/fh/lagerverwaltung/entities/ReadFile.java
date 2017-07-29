@@ -5,12 +5,12 @@ import com.google.gson.GsonBuilder;
 
 import java.io.*;
 
-public class Readfile {
+public class ReadFile {
 
     public static final String FILENAME = "warehouse.json";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public Readfile() {
+    public ReadFile() {
     }
 
     public Warehouse readWarehouse() {
@@ -24,8 +24,9 @@ public class Readfile {
     }
 
     public void writeWarehouse(Warehouse warehouse) {
-        try {
-            gson.toJson(warehouse, new FileWriter(FILENAME));
+        try (FileWriter fileWriter = new FileWriter(FILENAME)){
+            String json = gson.toJson(warehouse);
+            fileWriter.write(json);
         } catch (IOException e) {
             e.printStackTrace();
         }
