@@ -18,6 +18,9 @@ public class ReadFileTest {
 
         readFile.writeWarehouse(warehouse);
 
-        assertEquals(warehouse, readFile.readWarehouse());
+        String oldString = warehouse.toString();
+        String newString = readFile.readWarehouse().toString();
+
+        assertEquals(oldString, newString);
     }
 }
