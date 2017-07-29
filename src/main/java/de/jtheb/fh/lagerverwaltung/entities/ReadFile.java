@@ -24,7 +24,7 @@ public class ReadFile {
     }
 
     public void writeWarehouse(Warehouse warehouse) {
-        try (FileWriter fileWriter = new FileWriter(FILENAME)){
+        try (FileWriter fileWriter = new FileWriter(FILENAME)) {
             String json = gson.toJson(warehouse);
             fileWriter.write(json);
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package de.jtheb.fh.lagerverwaltung.entities;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import de.jtheb.fh.lagerverwaltung.entities.Compartment;
