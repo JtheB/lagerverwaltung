@@ -10,11 +10,11 @@ public class Menu {
     private JButton addNewItemButton;
     private JButton saveAndExitButton;
     private JButton getItemButton;
-    private JTextArea nameTextArea;
-    private JTextArea articleNrTextArea;
-    private JTextArea heightTextArea;
-    private JTextArea widthTextArea;
-    private JTextArea depthTextArea;
+    private JTextArea nameTextPane;
+    private JTextArea articleNrTextPane;
+    private JTextArea heightTextPane;
+    private JTextArea widthTextPane;
+    private JTextArea depthTextPane;
 
     public Menu() {
         addNewItemButton.addActionListener(new ActionListener() {
