@@ -37,7 +37,7 @@
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="289ec"/>
+          <labelFor value="c4e64"/>
           <text value="Height"/>
         </properties>
       </component>
@@ -46,7 +46,7 @@
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="ecc1b"/>
+          <labelFor value="7fd79"/>
           <text value="Width"/>
         </properties>
       </component>
@@ -55,11 +55,11 @@
           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="dacb2"/>
+          <labelFor value="272a0"/>
           <text value="Depth"/>
         </properties>
       </component>
-      <component id="289ec" class="javax.swing.JTextArea" binding="heightTextPane" default-binding="true">
+      <component id="c4e64" class="javax.swing.JTextField" binding="heightTextPane" default-binding="true">
         <constraints>
           <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -67,7 +67,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="ecc1b" class="javax.swing.JTextArea" binding="widthTextPane" default-binding="true">
+      <component id="7fd79" class="javax.swing.JTextField" binding="widthTextPane" default-binding="true">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -75,7 +75,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="dacb2" class="javax.swing.JTextArea" binding="depthTextPane" default-binding="true">
+      <component id="272a0" class="javax.swing.JTextField" binding="depthTextPane" default-binding="true">
         <constraints>
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -83,7 +83,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="1285a" class="javax.swing.JTextArea" binding="articleNrTextPane" default-binding="true">
+      <component id="2cd3c" class="javax.swing.JTextField" binding="articleNrTextPane" default-binding="true">
         <constraints>
           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -93,7 +93,7 @@
           <text value=""/>
         </properties>
       </component>
-      <component id="36b87" class="javax.swing.JTextArea" binding="nameTextPane" default-binding="true">
+      <component id="ba9ea" class="javax.swing.JTextField" binding="nameTextPane" default-binding="true">
         <constraints>
           <grid row="1" column="2" row-span="2" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -106,7 +106,7 @@
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="1285a"/>
+          <labelFor value="2cd3c"/>
           <text value="Article Nr.:"/>
         </properties>
       </component>
@@ -115,18 +115,25 @@
           <grid row="1" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <labelFor value="36b87"/>
+          <labelFor value="ba9ea"/>
           <text value="Name:"/>
         </properties>
       </component>
-      <component id="b48a8" class="javax.swing.JTree" binding="warehouseTree">
+      <scrollpane id="9d755">
         <constraints>
-          <grid row="0" column="0" row-span="6" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
+          <grid row="0" column="0" row-span="6" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="b48a8" class="javax.swing.JTree" binding="warehouseTree">
+            <constraints/>
+            <properties>
+              <editable value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

@@ -59,6 +59,15 @@ public class Warehouse {
         }
     }
 
+    public void addItem(Item item){
+        if (!isFull() && itemFits(item)){
+            Compartment compartment = findFittingCompartment(item);
+            compartment.add(item);
+        }
+    }
+
+//    public Item getItem(){}
+
     @Override
     public String toString() {
         return "Warehouse{" +
