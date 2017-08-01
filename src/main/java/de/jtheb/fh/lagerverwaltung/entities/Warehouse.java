@@ -61,12 +61,18 @@ public class Warehouse {
 
     public void addItem(Item item){
         if (!isFull() && itemFits(item)){
-            Compartment compartment = findFittingCompartment(item);
-            compartment.add(item);
+            Compartment fittingcompartment = findFittingCompartment(item);
+            /*for (Shelf shelf : shelves){
+                for (Compartment compartment :shelf.getCompartments()){
+                    if (compartment.equals(fittingcompartment)){
+                        compartment.add(item);
+                        break;
+                    }
+                }
+            }*/
+            fittingcompartment.add(item);
         }
     }
-
-//    public Item getItem(){}
 
     @Override
     public String toString() {

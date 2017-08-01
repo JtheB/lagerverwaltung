@@ -18,6 +18,7 @@ public class Compartment {
     public void add(final Item item) {
         this.items.add(item);
     }
+    public void remove(final Item item) {this.items.remove(item);}
 
     public List<Item> getItems() {
         return items;

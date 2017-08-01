@@ -12,8 +12,10 @@ public class ShelfTest {
     public void addCompartmentToShelf() throws Exception {
         Shelf shelf = new Shelf();
         Compartment compartment = new Compartment();
+        Item item = new Item();
 
         shelf.initiateShelf(compartment);
+        shelf.getCompartments().get(0).add(item);
 
         assertEquals(100, shelf.getCompartments().size());
         assertEquals(compartment, shelf.getCompartments().get(0));

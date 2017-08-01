@@ -33,7 +33,7 @@ public class Shelf {
     }
 
     public Compartment findFittingCompartment(Item item) {
-        for (Compartment compartment : this.compartments) {
+        for (Compartment compartment : compartments) {
             if (compartment.itemFitsWithArticleNr(item)) {
                 return compartment;
             }
