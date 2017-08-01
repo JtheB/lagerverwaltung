@@ -9,10 +9,7 @@ import sun.reflect.generics.tree.Tree;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,49 +20,102 @@ public class Menu {
     private JButton addNewItemButton;
     private JButton saveAndExitButton;
     private JButton getItemButton;
-    private JTextField nameTextPane;
-    private JTextField articleNrTextPane;
-    private JTextField heightTextPane;
-    private JTextField widthTextPane;
-    private JTextField depthTextPane;
 
     public Menu() {
         TreeNode rootNode = createNodes();
         TreeModel treeModel = new DefaultTreeModel(rootNode);
         warehouseTree.setModel(treeModel);
+        warehouseTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+
 
         addNewItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "Hello Get Item");
-            }
-        });
-        saveAndExitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+                Item item = new Item();
+                ReadFile readFile = new ReadFile();
+                Warehouse warehouse = readFile.readWarehouse();
 
+                String getarticleNr = JOptionPane.showInputDialog("Please input a value vor the article number:");
+                if (warehouse.itemNrExists(getarticleNr)) {
+                    Object[] options = {"OK", "CANCEL"};
+                    JOptionPane.showOptionDialog(null, "This article number already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    item = warehouse.getExistingItemFromArticleNr(getarticleNr);
+                    warehouse.addItem(item);
+                    readFile.writeWarehouse(warehouse);
+
+                    TreeNode rootNode = createNodes();
+                    TreeModel treeModel = new DefaultTreeModel(rootNode);
+                    warehouseTree.setModel(treeModel);
+                    return;
+                }
+                String getName = JOptionPane.showInputDialog("Please input a value for the name:");
+                if (warehouse.itemNameExists(getName)) {
+                    Object[] options = {"OK", "CANCEL"};
+                    JOptionPane.showOptionDialog(null, "This name already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                    item = warehouse.getExistingItemFromName(getName);
+                    warehouse.addItem(item);
+                    readFile.writeWarehouse(warehouse);
+
+                    TreeNode rootNode = createNodes();
+                    TreeModel treeModel = new DefaultTreeModel(rootNode);
+                    warehouseTree.setModel(treeModel);
+                    return;
+                }
+                String getHeight = JOptionPane.showInputDialog("Please input a value for the height:");
+                String getWidth = JOptionPane.showInputDialog("Please input a value for the width:");
+                String getDepth = JOptionPane.showInputDialog("Please input a value for the depth:");
+
+                int height = Integer.parseInt(getHeight);
+                int width = Integer.parseInt(getWidth);
+                int depth = Integer.parseInt(getDepth);
+                int maximumVolume = 200 * 200 * 200 + 1;
+                int volume = height * width * depth;
+
+                if (volume >= maximumVolume) {
+                    JOptionPane.showMessageDialog(null, "Your item is too large for this warehouse.");
+                    return;
+                } else {
+                    item.setArticleNr(getarticleNr);
+                    item.setName(getName);
+                    item.setWidth(width);
+                    item.setHeight(height);
+                    item.setDepth(depth);
+                    warehouse.addItem(item);
+                    readFile.writeWarehouse(warehouse);
+
+                    TreeNode rootNode = createNodes();
+                    TreeModel treeModel = new DefaultTreeModel(rootNode);
+                    warehouseTree.setModel(treeModel);
+                }
             }
         });
         getItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JOptionPane.showMessageDialog(null, getGetString());
+                //TODO Implement this event
             }
         });
         saveAndExitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ReadFile readFile = new ReadFile();
-                //readFile.writeWarehouse(); TODO Parameter to hand over warehouse
                 JOptionPane.showMessageDialog(null, "Your warehouse was saved in warehouse.json");
             }
         });
         warehouseTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) warehouseTree.getLastSelectedPathComponent();
+                if (node == null) return;
+                Object nodeInfo = node.getUserObject();
 
+                if (!node.isNodeChild(createNodes())) return;
             }
         });
+    }
+
+    public void getItemFromWarehouse() {
+
     }
 
     public String getGetString() {
@@ -104,7 +154,7 @@ public class Menu {
                 counter2++;
 
                 for (Item item : compartment.getItems()) {
-                    child = new DefaultMutableTreeNode(item.getName());
+                    child = new DefaultMutableTreeNode(item.getName() + " " + item.getArticleNr() + " (HxWxD)= " + item.getHeight() + " x " + item.getWidth() + " x " + item.getDepth());
                     parent.add(child);
                 }
             }
@@ -138,47 +188,16 @@ public class Menu {
         addNewItemButton.setText("Add new Item");
         panelMain.add(addNewItemButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         saveAndExitButton = new JButton();
-        saveAndExitButton.setText("Save and Exit");
+        saveAndExitButton.setText("Save the warehouse");
         panelMain.add(saveAndExitButton, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         getItemButton = new JButton();
         getItemButton.setText("Get Item");
         panelMain.add(getItemButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText("Height");
-        panelMain.add(label1, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("Width");
-        panelMain.add(label2, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Depth");
-        panelMain.add(label3, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        heightTextPane = new JTextField();
-        panelMain.add(heightTextPane, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        widthTextPane = new JTextField();
-        panelMain.add(widthTextPane, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        depthTextPane = new JTextField();
-        panelMain.add(depthTextPane, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        articleNrTextPane = new JTextField();
-        articleNrTextPane.setText("");
-        panelMain.add(articleNrTextPane, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        nameTextPane = new JTextField();
-        panelMain.add(nameTextPane, new GridConstraints(1, 2, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setText("Article Nr.:");
-        panelMain.add(label4, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label5 = new JLabel();
-        label5.setText("Name:");
-        panelMain.add(label5, new GridConstraints(1, 1, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panelMain.add(scrollPane1, new GridConstraints(0, 0, 6, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panelMain.add(scrollPane1, new GridConstraints(0, 0, 6, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         warehouseTree = new JTree();
         warehouseTree.setEditable(false);
         scrollPane1.setViewportView(warehouseTree);
-        label1.setLabelFor(heightTextPane);
-        label2.setLabelFor(widthTextPane);
-        label3.setLabelFor(depthTextPane);
-        label4.setLabelFor(articleNrTextPane);
-        label5.setLabelFor(nameTextPane);
     }
 
     /**

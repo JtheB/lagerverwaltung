@@ -61,8 +61,8 @@ public class Warehouse {
         }
     }
 
-    public void addItem(Item item){
-        if (!isFull() && itemFits(item)){
+    public void addItem(Item item) {
+        if (!isFull() && itemFits(item)) {
             Compartment fittingcompartment = findFittingCompartment(item);
             /*for (Shelf shelf : shelves){
                 for (Compartment compartment :shelf.getCompartments()){
@@ -74,6 +74,62 @@ public class Warehouse {
             }*/
             fittingcompartment.add(item);
         }
+    }
+
+    public Item getExistingItemFromArticleNr(String articleNr) {
+        if (itemNrExists(articleNr)) {
+            for (Shelf shelf : this.getShelves()) {
+                for (Compartment compartment : shelf.getCompartments()) {
+                    for (Item item : compartment.getItems()) {
+                        if (item.getArticleNr().equals(articleNr)) {
+                            return item;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Item getExistingItemFromName(String name) {
+        if (itemNameExists(name)) {
+            for (Shelf shelf : this.getShelves()) {
+                for (Compartment compartment : shelf.getCompartments()) {
+                    for (Item item : compartment.getItems()) {
+                        if (item.getName().equals(name)) {
+                            return item;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean itemNrExists(String articleNr) {
+        for (Shelf shelf : this.getShelves()) {
+            for (Compartment compartment : shelf.getCompartments()) {
+                for (Item item : compartment.getItems()) {
+                    if (item.getArticleNr().equals(articleNr)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean itemNameExists(String name) {
+        for (Shelf shelf : this.getShelves()) {
+            for (Compartment compartment : shelf.getCompartments()) {
+                for (Item item : compartment.getItems()) {
+                    if (item.getName().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
