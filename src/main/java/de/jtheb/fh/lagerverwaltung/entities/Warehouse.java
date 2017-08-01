@@ -53,8 +53,10 @@ public class Warehouse {
         this.shelves = shelves;
     }
 
-    public void initiateShelves(final Shelf shelf) {
+    public void initiateShelves() {
         for (int i = 0; i < SHELFCOUNT; i++) {
+            Shelf shelf = new Shelf();
+            shelf.initiateShelf();
             add(shelf);
         }
     }

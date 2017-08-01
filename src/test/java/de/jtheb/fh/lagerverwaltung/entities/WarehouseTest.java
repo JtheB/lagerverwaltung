@@ -14,13 +14,14 @@ public class WarehouseTest {
     @Test
     public void addShelfToWarehouse() throws Exception {
         Warehouse warehouse = new Warehouse();
-        final Shelf shelf = new Shelf();
 
-        warehouse.initiateShelves(shelf);
+        warehouse.initiateShelves();
 
         List<Shelf> shelves = warehouse.getShelves();
+        String test1 = shelves.get(0).toString();
+
         assertEquals(8, shelves.size());
-        assertEquals(shelf, warehouse.getShelves().get(0));
+        assertEquals(test1, warehouse.getShelves().get(1).toString());
     }
 }
 

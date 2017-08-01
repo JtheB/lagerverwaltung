@@ -25,17 +25,35 @@ public class MainTest {
         item.setName("Teddybärin");
         item.setWidth(30);
 
-        shelf.initiateShelf(compartment);
-        warehouse.initiateShelves(shelf);
+        shelf.initiateShelf();
+        warehouse.initiateShelves();
 
         warehouse.addItem(item);
 
         ReadFile readFile = new ReadFile();
         readFile.writeWarehouse(warehouse);
 
+        compartment.add(item);
+        String test = compartment.toString();
+
         assertEquals(100, shelf.getCompartments().size());
         assertEquals(8, warehouse.getShelves().size());
+        assertEquals(1, getTeddyCount(warehouse, item));
         assertFalse(warehouse.isFull());
-        assertEquals(compartment, warehouse.findFittingCompartment(item));
+        assertEquals(test, warehouse.findFittingCompartment(item).toString());
+    }
+
+    private int getTeddyCount(Warehouse warehouse, Item item){
+        int counter = 0;
+        for (Shelf shelf : warehouse.getShelves()){
+            for (Compartment compartment : shelf.getCompartments()){
+                for (Item item2 : compartment.getItems()){
+                    if (item2.equals(item)){
+                        counter++;
+                    }
+                }
+            }
+        }
+        return counter;
     }
 }

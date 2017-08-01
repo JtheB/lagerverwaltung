@@ -14,10 +14,9 @@ public class ShelfTest {
         Compartment compartment = new Compartment();
         Item item = new Item();
 
-        shelf.initiateShelf(compartment);
-        shelf.getCompartments().get(0).add(item);
+        shelf.initiateShelf();
 
         assertEquals(100, shelf.getCompartments().size());
-        assertEquals(compartment, shelf.getCompartments().get(0));
+        //assertEquals(compartment, shelf.getCompartments().get(0));
     }
 }

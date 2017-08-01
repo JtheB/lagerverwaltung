@@ -58,8 +58,9 @@ public class Shelf {
         this.compartments = compartments;
     }
 
-    public void initiateShelf(final Compartment compartment) {
+    public void initiateShelf() {
         for (int i = 0; i < COMPARTMENTCOUNT; i++) {
+            Compartment compartment = new Compartment();
             add(compartment);
         }
     }
