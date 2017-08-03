@@ -97,14 +97,21 @@ public class Menu {
                         int distance = 0;
 
                         for (int i = 0; i < howMany; i++) {
-                            warehouse.addItem(item);
+                            distance = warehouse.addItem(item);
                         }
-                        readFile.writeWarehouse(warehouse);
 
-                        TreeNode rootNode = createNodes();
-                        TreeModel treeModel = new DefaultTreeModel(rootNode);
-                        warehouseTree.setModel(treeModel);
-                        return;
+                        if (distance == 0) {
+                            JOptionPane.showMessageDialog(null, "The item doesn't fit.");
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
+                            readFile.writeWarehouse(warehouse);
+
+                            TreeNode rootNode = createNodes();
+                            TreeModel treeModel = new DefaultTreeModel(rootNode);
+                            warehouseTree.setModel(treeModel);
+                            return;
+                        }
                     }
                 }
                 String getHeight = JOptionPane.showInputDialog("Please input a value for the height:");
@@ -130,11 +137,11 @@ public class Menu {
                 if (volume >= maximumVolume) {
                     JOptionPane.showMessageDialog(null, "Your item is too large for this warehouse.");
                 } else {
-                    String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                    /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
                     if (null == getHowMany) {
                         return;
                     }
-                    int howMany = Integer.parseInt(getHowMany);
+                    int howMany = Integer.parseInt(getHowMany);*/
 
                     item.setArticleNr(getarticleNr);
                     item.setName(getName);
@@ -142,14 +149,20 @@ public class Menu {
                     item.setHeight(height);
                     item.setDepth(depth);
 
-                    for (int i = 0; i < howMany; i++) {
-                        warehouse.addItem(item);
-                    }
-                    readFile.writeWarehouse(warehouse);
+                    //for (int i = 0; i < howMany; i++) {
+                    int distance = warehouse.addItem(item);
 
-                    TreeNode rootNode = createNodes();
-                    TreeModel treeModel = new DefaultTreeModel(rootNode);
-                    warehouseTree.setModel(treeModel);
+
+                    if (distance == 0) {
+                        JOptionPane.showMessageDialog(null, "The item doesn't fit.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
+                        readFile.writeWarehouse(warehouse);
+
+                        TreeNode rootNode = createNodes();
+                        TreeModel treeModel = new DefaultTreeModel(rootNode);
+                        warehouseTree.setModel(treeModel);
+                    }
                 }
             }
         });
@@ -275,21 +288,24 @@ public class Menu {
      */
     private void $$$setupUI$$$() {
         panelMain = new JPanel();
-        panelMain.setLayout(new GridLayoutManager(7, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panelMain.setLayout(new GridLayoutManager(8, 3, new Insets(0, 0, 0, 0), -1, -1));
         addNewItemButton = new JButton();
         addNewItemButton.setText("Add new Item");
-        panelMain.add(addNewItemButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelMain.add(addNewItemButton, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         saveAndExitButton = new JButton();
         saveAndExitButton.setText("Save the warehouse");
-        panelMain.add(saveAndExitButton, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelMain.add(saveAndExitButton, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         getItemButton = new JButton();
         getItemButton.setText("Get Item");
-        panelMain.add(getItemButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panelMain.add(getItemButton, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panelMain.add(scrollPane1, new GridConstraints(0, 0, 6, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panelMain.add(scrollPane1, new GridConstraints(1, 0, 6, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         warehouseTree = new JTree();
         warehouseTree.setEditable(false);
         scrollPane1.setViewportView(warehouseTree);
+        final JLabel label1 = new JLabel();
+        label1.setText("Welcome to your warehouse organisator. All items are desplayed the following way: Name/ArticleNr/Height/Width/Depth");
+        panelMain.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
