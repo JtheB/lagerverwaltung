@@ -19,7 +19,6 @@ public class Menu {
     private JTree warehouseTree;
     public JPanel panelMain;
     private JButton addNewItemButton;
-    private JButton saveAndExitButton;
     private JButton getItemButton;
 
     public Menu() {
@@ -28,7 +27,11 @@ public class Menu {
         warehouseTree.setModel(treeModel);
         warehouseTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
+        addNewItemButtonListener();
+        warehouseTreeListener();
+    }
 
+    public void addNewItemButtonListener() {
         addNewItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -58,18 +61,8 @@ public class Menu {
                         for (int i = 0; i < howMany; i++) {
                             distance = warehouse.addItem(item);
                         }
-                        if (distance == 0) {
-                            JOptionPane.showMessageDialog(null, "The item doesn't fit.");
-                            return;
-                        } else {
-                            JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
-                            readFile.writeWarehouse(warehouse);
-
-                            TreeNode rootNode = createNodes();
-                            TreeModel treeModel = new DefaultTreeModel(rootNode);
-                            warehouseTree.setModel(treeModel);
-                            return;
-                        }
+                        addItemWithDistance(distance, warehouse, item, readFile);
+                        return;
                     }
                     return;
                 }
@@ -84,29 +77,12 @@ public class Menu {
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
                     } else if (option == JOptionPane.OK_OPTION) {
-                        /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
-                        if (null == getHowMany) {
-                            return;
-                        }
-                        int howMany = Integer.parseInt(getHowMany);*/
 
                         item = warehouse.getExistingItemFromName(getName);
 
-                        //for (int i = 0; i < howMany; i++) {
                         int distance = warehouse.addItem(item);
-
-                        if (distance == 0) {
-                            JOptionPane.showMessageDialog(null, "The item doesn't fit.");
-                            return;
-                        } else {
-                            JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
-                            readFile.writeWarehouse(warehouse);
-
-                            TreeNode rootNode = createNodes();
-                            TreeModel treeModel = new DefaultTreeModel(rootNode);
-                            warehouseTree.setModel(treeModel);
-                            return;
-                        }
+                        addItemWithDistance(distance, warehouse, item, readFile);
+                        return;
                     }
                 }
                 String getHeight = JOptionPane.showInputDialog("Please input a value for the height:");
@@ -132,11 +108,6 @@ public class Menu {
                 if (volume >= maximumVolume) {
                     JOptionPane.showMessageDialog(null, "Your item is too large for this warehouse.");
                 } else {
-                    /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
-                    if (null == getHowMany) {
-                        return;
-                    }
-                    int howMany = Integer.parseInt(getHowMany);*/
 
                     item.setArticleNr(getarticleNr);
                     item.setName(getName);
@@ -144,40 +115,35 @@ public class Menu {
                     item.setHeight(height);
                     item.setDepth(depth);
 
-                    //for (int i = 0; i < howMany; i++) {
                     int distance = warehouse.addItem(item);
 
 
-                    if (distance == 0) {
-                        JOptionPane.showMessageDialog(null, "The item doesn't fit.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
-                        readFile.writeWarehouse(warehouse);
-
-                        TreeNode rootNode = createNodes();
-                        TreeModel treeModel = new DefaultTreeModel(rootNode);
-                        warehouseTree.setModel(treeModel);
-                    }
+                    addItemWithDistance(distance, warehouse, item, readFile);
                 }
             }
         });
-        saveAndExitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, "Your warehouse was saved in warehouse.json");
-            }
-        });
+    }
+
+    public void addItemWithDistance(int distance, Warehouse warehouse, Item item, ReadFile readFile){
+        if (distance == 0) {
+            JOptionPane.showMessageDialog(null, "The item doesn't fit.");
+        } else {
+            JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
+            readFile.writeWarehouse(warehouse);
+
+            TreeNode rootNode = createNodes();
+            TreeModel treeModel = new DefaultTreeModel(rootNode);
+            warehouseTree.setModel(treeModel);
+        }
+    }
+
+    public void warehouseTreeListener() {
         warehouseTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) warehouseTree.getLastSelectedPathComponent();
                 if (node == null) {
-                    getItemButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            JOptionPane.showMessageDialog(null, "Nothing selected");
-                        }
-                    });
+                    noItemSelectedButtonListener();
                     return;
                 }
 
@@ -185,39 +151,44 @@ public class Menu {
                 String[] exactNodeInfo = nodeInfo.toString().split("/");
 
                 if (exactNodeInfo[0].equals("Warehouse") || exactNodeInfo[0].equals("Shelf") || exactNodeInfo[0].equals("Compartment")) {
-                    getItemButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            JOptionPane.showMessageDialog(null, "No item selected");
-                        }
-                    });
+                    noItemSelectedButtonListener();
                 } else {
-                    getItemButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            ReadFile readFile = new ReadFile();
-                            Warehouse warehouse = readFile.readWarehouse();
-
-                            Item finalItem = warehouse.getExistingItemFromArticleNr(exactNodeInfo[1]);
-                            System.out.println(exactNodeInfo[1]);
-
-                            int distance = warehouse.removeItem(finalItem);
-
-                            System.out.println("removal finished?");
-                            readFile.writeWarehouse(warehouse);
-
-                            TreeNode rootNode = createNodes();
-                            TreeModel treeModel = new DefaultTreeModel(rootNode);
-                            warehouseTree.setModel(treeModel);
-
-                            JOptionPane.showMessageDialog(null, getGetString(finalItem, distance));
-                        }
-                    });
+                    takeItemButtonListener(exactNodeInfo[1]);
                 }
             }
         });
     }
 
+    public void noItemSelectedButtonListener() {
+        getItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JOptionPane.showMessageDialog(null, "No item selected");
+            }
+        });
+    }
+
+    public void takeItemButtonListener(String articleNr) {
+        getItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                ReadFile readFile = new ReadFile();
+                Warehouse warehouse = readFile.readWarehouse();
+
+                Item finalItem = warehouse.getExistingItemFromArticleNr(articleNr);
+
+                int distance = warehouse.removeItem(finalItem);
+
+                readFile.writeWarehouse(warehouse);
+
+                TreeNode rootNode = createNodes();
+                TreeModel treeModel = new DefaultTreeModel(rootNode);
+                warehouseTree.setModel(treeModel);
+
+                JOptionPane.showMessageDialog(null, getGetString(finalItem, distance));
+            }
+        });
+    }
 
     public String getGetString(Item item, int distance) {
         return "Here is your Item: \nName: " + item.getName() + "\nArticleNr: " + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe robot had a distance of " + distance + " cm back and forth";
@@ -287,9 +258,6 @@ public class Menu {
         addNewItemButton = new JButton();
         addNewItemButton.setText("Add new Item");
         panelMain.add(addNewItemButton, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        saveAndExitButton = new JButton();
-        saveAndExitButton.setText("Save the warehouse");
-        panelMain.add(saveAndExitButton, new GridConstraints(7, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         getItemButton = new JButton();
         getItemButton.setText("Get Item");
         panelMain.add(getItemButton, new GridConstraints(7, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
