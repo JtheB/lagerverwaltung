@@ -21,7 +21,7 @@ public class CompartmentTest {
         compartment.add(item);
         compartment.add(item);
         compartment.add(item);
-        compartment.remove(item);
+        compartment.removeItem(item);
 
         assertEquals("000-000", compartment.getArticleNr());
         assertEquals(2, compartment.getItems().size());

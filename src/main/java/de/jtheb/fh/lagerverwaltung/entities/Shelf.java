@@ -1,7 +1,10 @@
 package de.jtheb.fh.lagerverwaltung.entities;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Shelf {
     public static final int COMPARTMENTCOUNT = 100;
@@ -63,6 +66,26 @@ public class Shelf {
             Compartment compartment = new Compartment();
             add(compartment);
         }
+    }
+
+    public void removeItem(Item item){
+        if (itemExists(item)) {
+            for (Compartment compartment : Lists.reverse(compartments)) {
+                if (compartment.itemExists(item)) {
+                    compartment.removeItem(item);
+                    return;
+                }
+            }
+        }
+    }
+
+    public boolean itemExists(Item item){
+        for (Compartment compartment : compartments){
+            if (compartment.itemExists(item)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

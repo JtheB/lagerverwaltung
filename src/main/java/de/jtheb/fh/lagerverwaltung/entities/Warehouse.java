@@ -1,5 +1,7 @@
 package de.jtheb.fh.lagerverwaltung.entities;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,9 @@ public class Warehouse {
     public Compartment findFittingCompartment(Item item) {
         if (!isFull()) {
             for (Shelf shelf : shelves) {
-                return shelf.findFittingCompartment(item);
+                if (null != shelf.findFittingCompartment(item)) {
+                    return shelf.findFittingCompartment(item);
+                }
             }
         }
         return null;
@@ -61,19 +65,21 @@ public class Warehouse {
         }
     }
 
-    public void addItem(Item item) {
+    public int addItem(Item item) {
+        int distance = 1;
         if (!isFull() && itemFits(item)) {
-            Compartment fittingcompartment = findFittingCompartment(item);
-            /*for (Shelf shelf : shelves){
-                for (Compartment compartment :shelf.getCompartments()){
-                    if (compartment.equals(fittingcompartment)){
-                        compartment.add(item);
-                        break;
-                    }
+            Compartment fittingcompartment = new Compartment();//findFittingCompartment(item);
+            for (Shelf shelf : shelves) {
+                fittingcompartment = shelf.findFittingCompartment(item);
+                if (null == fittingcompartment) {
+                    distance++;
+                } else {
+                    fittingcompartment.add(item);
+                    return distance * SPACE_BETWEEN_SHELVES;
                 }
-            }*/
-            fittingcompartment.add(item);
+            }
         }
+        return 0; //TODO Returns 0 even if there are plenty of empty shelves left.
     }
 
     public Item getExistingItemFromArticleNr(String articleNr) {
@@ -130,6 +136,34 @@ public class Warehouse {
             }
         }
         return false;
+    }
+
+    public boolean itemExits(Item item) {
+        for (Shelf shelf : shelves) {
+            if (shelf.itemExists(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This function removes the last Item in the warehouse with type item and returns the distance the robot has to drive to get it.
+     *
+     * @param item item is an Item which has an articleID, height, width, depth and a name. It is the object to be removed.
+     * @return this function returns the distance the robot has to drive to get to the shelf
+     */
+    public int removeItem(Item item) {
+        int shelfDistance = SHELFCOUNT;
+        for (Shelf shelf : Lists.reverse(shelves)) {
+            if (shelf.itemExists(item)) {
+                shelf.removeItem(item);
+                return shelfDistance * SPACE_BETWEEN_SHELVES;
+            } else {
+                shelfDistance--;
+            }
+        }
+        return shelfDistance;
     }
 
     @Override

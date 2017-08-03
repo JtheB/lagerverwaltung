@@ -3,6 +3,7 @@ package de.jtheb.fh.lagerverwaltung;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import de.jtheb.fh.lagerverwaltung.entities.*;
+import jdk.nashorn.internal.scripts.JO;
 import org.jdom.Content;
 import sun.reflect.generics.tree.Tree;
 
@@ -36,64 +37,113 @@ public class Menu {
                 Warehouse warehouse = readFile.readWarehouse();
 
                 String getarticleNr = JOptionPane.showInputDialog("Please input a value vor the article number:");
-                if (warehouse.itemNrExists(getarticleNr)) {
+                if (null == getarticleNr) {
+                    return;
+                } else if (warehouse.itemNrExists(getarticleNr)) {
                     Object[] options = {"OK", "CANCEL"};
-                    JOptionPane.showOptionDialog(null, "This article number already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                    item = warehouse.getExistingItemFromArticleNr(getarticleNr);
-                    warehouse.addItem(item);
-                    readFile.writeWarehouse(warehouse);
+                    int option = JOptionPane.showOptionDialog(null, "This article number already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 
-                    TreeNode rootNode = createNodes();
-                    TreeModel treeModel = new DefaultTreeModel(rootNode);
-                    warehouseTree.setModel(treeModel);
+                    if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+                        return;
+                    }
+                    else if (option == JOptionPane.OK_OPTION) {
+                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        int howMany = Integer.parseInt(getHowMany);
+
+                        item = warehouse.getExistingItemFromArticleNr(getarticleNr);
+
+                        int distance = 0;
+
+                        for (int i = 0; i < howMany; i++) {
+                            distance = warehouse.addItem(item);
+                        }
+
+                        if (distance == 0) {
+                            JOptionPane.showMessageDialog(null, "The item doesn't fit.");
+                            return;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance);
+                            readFile.writeWarehouse(warehouse);
+
+                            TreeNode rootNode = createNodes();
+                            TreeModel treeModel = new DefaultTreeModel(rootNode);
+                            warehouseTree.setModel(treeModel);
+                            return;
+                        }
+                    }
                     return;
                 }
-                String getName = JOptionPane.showInputDialog("Please input a value for the name:");
-                if (warehouse.itemNameExists(getName)) {
-                    Object[] options = {"OK", "CANCEL"};
-                    JOptionPane.showOptionDialog(null, "This name already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                    item = warehouse.getExistingItemFromName(getName);
-                    warehouse.addItem(item);
-                    readFile.writeWarehouse(warehouse);
 
-                    TreeNode rootNode = createNodes();
-                    TreeModel treeModel = new DefaultTreeModel(rootNode);
-                    warehouseTree.setModel(treeModel);
+                String getName = JOptionPane.showInputDialog("Please input a value for the name:");
+                if (null == getName) {
                     return;
+                } else if (warehouse.itemNameExists(getName)) {
+                    Object[] options = {"OK", "CANCEL"};
+                    int option = JOptionPane.showOptionDialog(null, "This name already exists. If you want to add the existing item click OK to continue", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+
+                    if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+                        return;
+                    }
+                    else if (option == JOptionPane.OK_OPTION) {
+                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        int howMany = Integer.parseInt(getHowMany);
+
+                        item = warehouse.getExistingItemFromName(getName);
+
+                        int distance = 0;
+
+                        for (int i = 0; i < howMany; i++) {
+                            warehouse.addItem(item);
+                        }
+                        readFile.writeWarehouse(warehouse);
+
+                        TreeNode rootNode = createNodes();
+                        TreeModel treeModel = new DefaultTreeModel(rootNode);
+                        warehouseTree.setModel(treeModel);
+                        return;
+                    }
                 }
                 String getHeight = JOptionPane.showInputDialog("Please input a value for the height:");
+                if (null == getHeight) {
+                    return;
+                }
                 String getWidth = JOptionPane.showInputDialog("Please input a value for the width:");
+                if (null == getWidth) {
+                    return;
+                }
                 String getDepth = JOptionPane.showInputDialog("Please input a value for the depth:");
+                if (null == getDepth) {
+                    return;
+                }
 
                 int height = Integer.parseInt(getHeight);
                 int width = Integer.parseInt(getWidth);
                 int depth = Integer.parseInt(getDepth);
-                int maximumVolume = 200 * 200 * 200 + 1;
+
+                int maximumVolume = Compartment.HEIGHT * Compartment.WIDTH * Compartment.DEPTH + 1;
                 int volume = height * width * depth;
 
                 if (volume >= maximumVolume) {
                     JOptionPane.showMessageDialog(null, "Your item is too large for this warehouse.");
-                    return;
                 } else {
+                    String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                    int howMany = Integer.parseInt(getHowMany);
+
                     item.setArticleNr(getarticleNr);
                     item.setName(getName);
                     item.setWidth(width);
                     item.setHeight(height);
                     item.setDepth(depth);
-                    warehouse.addItem(item);
+
+                    for (int i = 0; i < howMany; i++) {
+                        warehouse.addItem(item);
+                    }
                     readFile.writeWarehouse(warehouse);
 
                     TreeNode rootNode = createNodes();
                     TreeModel treeModel = new DefaultTreeModel(rootNode);
                     warehouseTree.setModel(treeModel);
                 }
-            }
-        });
-        getItemButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                JOptionPane.showMessageDialog(null, getGetString());
-                //TODO Implement this event
             }
         });
         saveAndExitButton.addActionListener(new ActionListener() {
@@ -108,19 +158,44 @@ public class Menu {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) warehouseTree.getLastSelectedPathComponent();
                 if (node == null) return;
                 Object nodeInfo = node.getUserObject();
+                String[] exactNodeInfo = nodeInfo.toString().split("|");
 
-                if (!node.isNodeChild(createNodes())) return;
+                for (String s : exactNodeInfo) {
+                    if (s.equals("Shelf") || s.equals("Compartment")) return;
+
+                    getItemButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            ReadFile readFile = new ReadFile();
+                            Warehouse warehouse = readFile.readWarehouse();
+
+                            Item item = new Item();
+                            item.setName(exactNodeInfo[0]);
+                            item.setArticleNr(exactNodeInfo[1]);
+                            item.setHeight(Integer.parseInt(exactNodeInfo[2]));
+                            item.setWidth(Integer.parseInt(exactNodeInfo[3]));
+                            item.setHeight(Integer.parseInt(exactNodeInfo[4]));
+
+                            int distance = warehouse.removeItem(item);
+
+                            readFile.writeWarehouse(warehouse);
+
+                            TreeNode rootNode = createNodes();
+                            TreeModel treeModel = new DefaultTreeModel(rootNode);
+                            warehouseTree.setModel(treeModel);
+
+                            JOptionPane.showMessageDialog(null, getGetString(item, distance));
+                        }
+                    });
+
+                }
             }
         });
     }
 
-    public void getItemFromWarehouse() {
 
-    }
-
-    public String getGetString() {
-        String Output = ""; //TODO Implement a way to get the Pathway to
-        return Output;
+    public String getGetString(Item item, int distance) {
+        return "Here is your Item:" + item.getName() + "|" + item.getArticleNr() + "|" + item.getHeight() + "|" + item.getWidth() + "|" + item.getDepth() + "\nThe robot had a distance of " + distance + " back and forth.";
     }
 
     public static void main(String[] args) {
@@ -144,17 +219,17 @@ public class Menu {
         int counter1 = 1;
         int counter2 = 1;
         for (Shelf shelf : warehouse.getShelves()) {
-            grandparent = new DefaultMutableTreeNode("Shelf " + counter1);
+            grandparent = new DefaultMutableTreeNode("Shelf|" + counter1);
             root.add(grandparent);
             counter1++;
 
             for (Compartment compartment : shelf.getCompartments()) {
-                parent = new DefaultMutableTreeNode("Compartment " + counter2);
+                parent = new DefaultMutableTreeNode("Compartment|" + counter2);
                 grandparent.add(parent);
                 counter2++;
 
                 for (Item item : compartment.getItems()) {
-                    child = new DefaultMutableTreeNode(item.getName() + " " + item.getArticleNr() + " (HxWxD)= " + item.getHeight() + " x " + item.getWidth() + " x " + item.getDepth());
+                    child = new DefaultMutableTreeNode(item.getName() + "|" + item.getArticleNr() + "|" + item.getHeight() + "|" + item.getWidth() + "|" + item.getDepth());
                     parent.add(child);
                 }
             }

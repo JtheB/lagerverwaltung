@@ -18,7 +18,7 @@ public class Compartment {
     public void add(final Item item) {
         this.items.add(item);
     }
-    public void remove(final Item item) {this.items.remove(item);}
+    public void removeItem(final Item item) {this.items.remove(item);}
 
     public List<Item> getItems() {
         return items;
@@ -74,11 +74,11 @@ public class Compartment {
      * @param item is an Item which has an articleID, height, width, depth and a name.
      */
     public boolean itemFits(Item item) {
-        if (null == this.getArticleNr()) {
-            return true;
-        } else {
-            return this.getArticleNr().equals(item.getArticleNr());
-        }
+        return null == this.getArticleNr() || this.getArticleNr().equals(item.getArticleNr());
+    }
+
+    public boolean itemExists(Item item) {
+        return null != this.getArticleNr() && this.getArticleNr().equals(item.getArticleNr());
     }
 
     @Override
