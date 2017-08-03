@@ -78,7 +78,7 @@ public class Compartment {
     }
 
     public boolean itemExists(Item item) {
-        return null != this.getArticleNr() && this.getArticleNr().equals(item.getArticleNr());
+        return (null != this.getArticleNr()) && this.getArticleNr().equals(item.getArticleNr());
     }
 
     @Override

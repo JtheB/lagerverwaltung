@@ -45,9 +45,11 @@ public class Menu {
 
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
-                    }
-                    else if (option == JOptionPane.OK_OPTION) {
+                    } else if (option == JOptionPane.OK_OPTION) {
                         String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        if (null == getHowMany) {
+                            return;
+                        }
                         int howMany = Integer.parseInt(getHowMany);
 
                         item = warehouse.getExistingItemFromArticleNr(getarticleNr);
@@ -62,7 +64,7 @@ public class Menu {
                             JOptionPane.showMessageDialog(null, "The item doesn't fit.");
                             return;
                         } else {
-                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance);
+                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
                             readFile.writeWarehouse(warehouse);
 
                             TreeNode rootNode = createNodes();
@@ -83,9 +85,11 @@ public class Menu {
 
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
-                    }
-                    else if (option == JOptionPane.OK_OPTION) {
+                    } else if (option == JOptionPane.OK_OPTION) {
                         String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        if (null == getHowMany) {
+                            return;
+                        }
                         int howMany = Integer.parseInt(getHowMany);
 
                         item = warehouse.getExistingItemFromName(getName);
@@ -127,6 +131,9 @@ public class Menu {
                     JOptionPane.showMessageDialog(null, "Your item is too large for this warehouse.");
                 } else {
                     String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                    if (null == getHowMany) {
+                        return;
+                    }
                     int howMany = Integer.parseInt(getHowMany);
 
                     item.setArticleNr(getarticleNr);
@@ -156,38 +163,48 @@ public class Menu {
             @Override
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) warehouseTree.getLastSelectedPathComponent();
-                if (node == null) return;
+                if (node == null) {
+                    getItemButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            JOptionPane.showMessageDialog(null, "Nothing selected");
+                        }
+                    });
+                    return;
+                }
+
                 Object nodeInfo = node.getUserObject();
-                String[] exactNodeInfo = nodeInfo.toString().split("|");
+                String[] exactNodeInfo = nodeInfo.toString().split("/");
 
-                for (String s : exactNodeInfo) {
-                    if (s.equals("Shelf") || s.equals("Compartment")) return;
-
+                if (exactNodeInfo[0].equals("Warehouse") || exactNodeInfo[0].equals("Shelf") || exactNodeInfo[0].equals("Compartment")) {
+                    getItemButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            JOptionPane.showMessageDialog(null, "No item selected");
+                        }
+                    });
+                } else {
                     getItemButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
                             ReadFile readFile = new ReadFile();
                             Warehouse warehouse = readFile.readWarehouse();
 
-                            Item item = new Item();
-                            item.setName(exactNodeInfo[0]);
-                            item.setArticleNr(exactNodeInfo[1]);
-                            item.setHeight(Integer.parseInt(exactNodeInfo[2]));
-                            item.setWidth(Integer.parseInt(exactNodeInfo[3]));
-                            item.setHeight(Integer.parseInt(exactNodeInfo[4]));
+                            Item finalItem = warehouse.getExistingItemFromArticleNr(exactNodeInfo[1]);
+                            System.out.println(exactNodeInfo[1]);
 
-                            int distance = warehouse.removeItem(item);
+                            int distance = warehouse.removeItem(finalItem);
 
+                            System.out.println("removal finished?");
                             readFile.writeWarehouse(warehouse);
 
                             TreeNode rootNode = createNodes();
                             TreeModel treeModel = new DefaultTreeModel(rootNode);
                             warehouseTree.setModel(treeModel);
 
-                            JOptionPane.showMessageDialog(null, getGetString(item, distance));
+                            JOptionPane.showMessageDialog(null, getGetString(finalItem, distance));
                         }
                     });
-
                 }
             }
         });
@@ -195,7 +212,7 @@ public class Menu {
 
 
     public String getGetString(Item item, int distance) {
-        return "Here is your Item:" + item.getName() + "|" + item.getArticleNr() + "|" + item.getHeight() + "|" + item.getWidth() + "|" + item.getDepth() + "\nThe robot had a distance of " + distance + " back and forth.";
+        return "Here is your Item: \nName: " + item.getName() + "\nArticleNr: " + item.getArticleNr() + "\nWith height: " + item.getHeight() + "\nwidth: " + item.getWidth() + "\ndepth: " + item.getDepth() + "\nThe robot had a distance of " + distance + " back and forth.";
     }
 
     public static void main(String[] args) {
@@ -219,17 +236,17 @@ public class Menu {
         int counter1 = 1;
         int counter2 = 1;
         for (Shelf shelf : warehouse.getShelves()) {
-            grandparent = new DefaultMutableTreeNode("Shelf|" + counter1);
+            grandparent = new DefaultMutableTreeNode("Shelf/ " + counter1);
             root.add(grandparent);
             counter1++;
 
             for (Compartment compartment : shelf.getCompartments()) {
-                parent = new DefaultMutableTreeNode("Compartment|" + counter2);
+                parent = new DefaultMutableTreeNode("Compartment/ " + counter2);
                 grandparent.add(parent);
                 counter2++;
 
                 for (Item item : compartment.getItems()) {
-                    child = new DefaultMutableTreeNode(item.getName() + "|" + item.getArticleNr() + "|" + item.getHeight() + "|" + item.getWidth() + "|" + item.getDepth());
+                    child = new DefaultMutableTreeNode(item.getName() + "/" + item.getArticleNr() + "/" + item.getHeight() + "/" + item.getWidth() + "/" + item.getDepth());
                     parent.add(child);
                 }
             }
