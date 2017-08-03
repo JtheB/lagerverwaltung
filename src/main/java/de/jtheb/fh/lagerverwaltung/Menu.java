@@ -25,7 +25,7 @@ public class Menu {
         warehouseTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         addNewItemButtonListener();
-        warehouseTreeListener();
+        takeItemButtonListener();
     }
 
     public void addNewItemButtonListener() {
@@ -36,7 +36,7 @@ public class Menu {
                 ReadFile readFile = new ReadFile();
                 Warehouse warehouse = readFile.readWarehouse();
 
-                String getarticleNr = JOptionPane.showInputDialog("Please input a value vor the article number:");
+                String getarticleNr = JOptionPane.showInputDialog("Please input a value for the article number:");
                 if (null == getarticleNr) {
                     return;
                 } else if (warehouse.itemNrExists(getarticleNr)) {
@@ -46,18 +46,8 @@ public class Menu {
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
                     } else if (option == JOptionPane.OK_OPTION) {
-                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
-                        if (null == getHowMany) {
-                            return;
-                        }
-                        int howMany = Integer.parseInt(getHowMany);
-
                         item = warehouse.getExistingItemFromArticleNr(getarticleNr);
-
-                        int distance = 0;
-                        for (int i = 0; i < howMany; i++) {
-                            distance = warehouse.addItem(item);
-                        }
+                        int distance = warehouse.addItem(item);
                         addItemWithDistance(distance, warehouse, item, readFile);
                         return;
                     }
@@ -134,23 +124,22 @@ public class Menu {
         }
     }
 
+    /**
+     * Other possible Way to control takeItem:
+     */
     public void warehouseTreeListener() {
         warehouseTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) warehouseTree.getLastSelectedPathComponent();
-                if (node == null) {
-                    noItemSelectedButtonListener();
-                    return;
-                }
+                if (node != null) {
 
-                Object nodeInfo = node.getUserObject();
-                String[] exactNodeInfo = nodeInfo.toString().split("/");
+                    Object nodeInfo = node.getUserObject();
+                    String[] exactNodeInfo = nodeInfo.toString().split("/");
 
-                if (exactNodeInfo[0].equals("Warehouse") || exactNodeInfo[0].equals("Shelf") || exactNodeInfo[0].equals("Compartment")) {
-                    noItemSelectedButtonListener();
-                } else {
-                    takeItemButtonListener(exactNodeInfo[1]);
+                    if (!exactNodeInfo[0].equals("Warehouse") && !exactNodeInfo[0].equals("Shelf") && !exactNodeInfo[0].equals("Compartment")) {
+                        takeItemButtonListener();
+                    }
                 }
             }
         });
@@ -165,24 +154,31 @@ public class Menu {
         });
     }
 
-    public void takeItemButtonListener(String articleNr) {
+    public void takeItemButtonListener() {
         getItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ReadFile readFile = new ReadFile();
                 Warehouse warehouse = readFile.readWarehouse();
+                String getarticleNr = JOptionPane.showInputDialog("Please input the article number of the desired Item:");
+                if (null == getarticleNr) {
+                    JOptionPane.showMessageDialog(null, "No valid ArticleNr.");
+                } else if (warehouse.itemNrExists(getarticleNr)) {
+                    Item finalItem = warehouse.getExistingItemFromArticleNr(getarticleNr);
 
-                Item finalItem = warehouse.getExistingItemFromArticleNr(articleNr);
+                    int distance = warehouse.removeItem(finalItem);
 
-                int distance = warehouse.removeItem(finalItem);
+                    readFile.writeWarehouse(warehouse);
 
-                readFile.writeWarehouse(warehouse);
+                    TreeNode rootNode = createNodes();
+                    TreeModel treeModel = new DefaultTreeModel(rootNode);
+                    warehouseTree.setModel(treeModel);
 
-                TreeNode rootNode = createNodes();
-                TreeModel treeModel = new DefaultTreeModel(rootNode);
-                warehouseTree.setModel(treeModel);
 
-                JOptionPane.showMessageDialog(null, getGetString(finalItem, distance));
+                    JOptionPane.showMessageDialog(null, getGetString(finalItem, distance));
+                } else {
+                    JOptionPane.showMessageDialog(null, "ArticleNr does not exist.");
+                }
             }
         });
     }

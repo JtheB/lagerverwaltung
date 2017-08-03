@@ -70,12 +70,9 @@ public class Warehouse {
     public int addItem(Item item) {
         int distance = 1;
         Compartment fittingCompartment;
-        System.out.println("\ndavor"+ itemFits(item));
         if (itemFits(item)) {
-            System.out.println("vor For:");
             for (Shelf shelf : shelves) {
                 fittingCompartment = shelf.findFittingCompartment(item);
-                System.out.println("in for test" + distance);
                 if (null == fittingCompartment) {
                     distance++;
                 } else {
