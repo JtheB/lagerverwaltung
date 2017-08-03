@@ -21,9 +21,10 @@ public class CompartmentTest {
         compartment.add(item);
         compartment.add(item);
         compartment.add(item);
-        //compartment.removeLastItem(); //TODO invalid type compartment Error!
+        //compartment.removeLastItem(); //TODO fix cannot find symbol removeLastItem() Error!
 
         assertEquals("000-000", compartment.getArticleNr());
+        assertTrue(compartment.itemExists(item));
         assertEquals(3, compartment.getItems().size());
         assertEquals(item, compartment.getItems().get(0));
     }

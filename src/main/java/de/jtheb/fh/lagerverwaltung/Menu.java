@@ -46,17 +46,18 @@ public class Menu {
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
                     } else if (option == JOptionPane.OK_OPTION) {
-                        /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
                         if (null == getHowMany) {
                             return;
                         }
-                        int howMany = Integer.parseInt(getHowMany);*/
+                        int howMany = Integer.parseInt(getHowMany);
 
                         item = warehouse.getExistingItemFromArticleNr(getarticleNr);
 
-                        //for (int i = 0; i < howMany; i++) {
-                        int distance = warehouse.addItem(item);
-
+                        int distance = 0;
+                        for (int i = 0; i < howMany; i++) {
+                            distance = warehouse.addItem(item);
+                        }
                         if (distance == 0) {
                             JOptionPane.showMessageDialog(null, "The item doesn't fit.");
                             return;

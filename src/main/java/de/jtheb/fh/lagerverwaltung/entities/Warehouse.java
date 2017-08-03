@@ -19,7 +19,9 @@ public class Warehouse {
     public boolean itemFits(Item item) {
         if (!isFull()) {
             for (Shelf shelf : shelves) {
-                return shelf.itemFits(item);
+                if (shelf.itemFits(item)){
+                    return true;
+                }
             }
         }
         return false;
@@ -67,14 +69,17 @@ public class Warehouse {
 
     public int addItem(Item item) {
         int distance = 1;
-        if (!isFull() && itemFits(item)) {
-            Compartment fittingcompartment = new Compartment();//findFittingCompartment(item);
+        Compartment fittingCompartment;
+        System.out.println("\ndavor"+ itemFits(item));
+        if (itemFits(item)) {
+            System.out.println("vor For:");
             for (Shelf shelf : shelves) {
-                fittingcompartment = shelf.findFittingCompartment(item);
-                if (null == fittingcompartment) {
+                fittingCompartment = shelf.findFittingCompartment(item);
+                System.out.println("in for test" + distance);
+                if (null == fittingCompartment) {
                     distance++;
                 } else {
-                    fittingcompartment.add(item);
+                    fittingCompartment.add(item);
                     return distance * SPACE_BETWEEN_SHELVES;
                 }
             }
