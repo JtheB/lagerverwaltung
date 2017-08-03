@@ -72,7 +72,7 @@ public class Shelf {
         if (itemExists(item)) {
             for (Compartment compartment : Lists.reverse(compartments)) {
                 if (compartment.itemExists(item)) {
-                    compartment.removeItem(item);
+                    compartment.removeLastItem();
                     return;
                 }
             }

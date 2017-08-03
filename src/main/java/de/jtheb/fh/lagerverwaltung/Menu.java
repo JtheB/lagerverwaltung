@@ -46,25 +46,22 @@ public class Menu {
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
                     } else if (option == JOptionPane.OK_OPTION) {
-                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
                         if (null == getHowMany) {
                             return;
                         }
-                        int howMany = Integer.parseInt(getHowMany);
+                        int howMany = Integer.parseInt(getHowMany);*/
 
                         item = warehouse.getExistingItemFromArticleNr(getarticleNr);
 
-                        int distance = 0;
-
-                        for (int i = 0; i < howMany; i++) {
-                            distance = warehouse.addItem(item);
-                        }
+                        //for (int i = 0; i < howMany; i++) {
+                        int distance = warehouse.addItem(item);
 
                         if (distance == 0) {
                             JOptionPane.showMessageDialog(null, "The item doesn't fit.");
                             return;
                         } else {
-                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
+                            JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
                             readFile.writeWarehouse(warehouse);
 
                             TreeNode rootNode = createNodes();
@@ -86,25 +83,22 @@ public class Menu {
                     if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
                         return;
                     } else if (option == JOptionPane.OK_OPTION) {
-                        String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
+                        /*String getHowMany = JOptionPane.showInputDialog("Please input how many items you want to add:");
                         if (null == getHowMany) {
                             return;
                         }
-                        int howMany = Integer.parseInt(getHowMany);
+                        int howMany = Integer.parseInt(getHowMany);*/
 
                         item = warehouse.getExistingItemFromName(getName);
 
-                        int distance = 0;
-
-                        for (int i = 0; i < howMany; i++) {
-                            distance = warehouse.addItem(item);
-                        }
+                        //for (int i = 0; i < howMany; i++) {
+                        int distance = warehouse.addItem(item);
 
                         if (distance == 0) {
                             JOptionPane.showMessageDialog(null, "The item doesn't fit.");
                             return;
                         } else {
-                            JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
+                            JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
                             readFile.writeWarehouse(warehouse);
 
                             TreeNode rootNode = createNodes();
@@ -156,7 +150,7 @@ public class Menu {
                     if (distance == 0) {
                         JOptionPane.showMessageDialog(null, "The item doesn't fit.");
                     } else {
-                        JOptionPane.showMessageDialog(null, "The Robot had to drive a distance of " + distance + " back and forth.");
+                        JOptionPane.showMessageDialog(null, "The item was placed in the warehouse. \nName: " + item.getName() + "\nArticle Nr.:" + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe Robot had to drive a distance of " + distance + " cm back and forth");
                         readFile.writeWarehouse(warehouse);
 
                         TreeNode rootNode = createNodes();
@@ -225,7 +219,7 @@ public class Menu {
 
 
     public String getGetString(Item item, int distance) {
-        return "Here is your Item: \nName: " + item.getName() + "\nArticleNr: " + item.getArticleNr() + "\nWith height: " + item.getHeight() + "\nwidth: " + item.getWidth() + "\ndepth: " + item.getDepth() + "\nThe robot had a distance of " + distance + " back and forth.";
+        return "Here is your Item: \nName: " + item.getName() + "\nArticleNr: " + item.getArticleNr() + "\nMeasurements (HxWxD) " + item.getHeight() + "cm x " + item.getWidth() + "cm x " + item.getDepth() + "\nThe robot had a distance of " + distance + " cm back and forth";
     }
 
     public static void main(String[] args) {

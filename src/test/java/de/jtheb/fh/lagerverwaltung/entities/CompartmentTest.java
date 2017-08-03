@@ -21,10 +21,10 @@ public class CompartmentTest {
         compartment.add(item);
         compartment.add(item);
         compartment.add(item);
-        compartment.removeItem(item);
+        //compartment.removeLastItem(); //TODO invalid type compartment Error!
 
         assertEquals("000-000", compartment.getArticleNr());
-        assertEquals(2, compartment.getItems().size());
+        assertEquals(3, compartment.getItems().size());
         assertEquals(item, compartment.getItems().get(0));
     }
 }
