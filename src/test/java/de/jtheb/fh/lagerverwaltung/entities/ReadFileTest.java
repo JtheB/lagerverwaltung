@@ -11,8 +11,8 @@ public class ReadFileTest {
         Shelf shelf = new Shelf();
         Compartment compartment = new Compartment();
 
-        shelf.initiateShelf(compartment);
-        warehouse.initiateShelves(shelf);
+        shelf.initiateShelf();
+        warehouse.initiateShelves();
 
         ReadFile readFile = new ReadFile();
 

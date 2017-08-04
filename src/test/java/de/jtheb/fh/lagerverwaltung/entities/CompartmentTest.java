@@ -12,12 +12,20 @@ public class CompartmentTest {
         Compartment compartment = new Compartment();
         Item item = new Item();
 
-        item.setArticleNr("0000");
-        compartment.add(item);
-        compartment.add(item);
+        item.setArticleNr("000-000");
+        item.setDepth(10);
+        item.setHeight(20);
+        item.setName("Teddybär");
+        item.setWidth(30);
 
-        assertEquals("0000", compartment.getArticleNr());
-        assertEquals(2, compartment.getItems().size());
+        compartment.add(item);
+        compartment.add(item);
+        compartment.add(item);
+        //compartment.removeLastItem(); //TODO fix cannot find symbol removeLastItem() Error!
+
+        assertEquals("000-000", compartment.getArticleNr());
+        assertTrue(compartment.itemExists(item));
+        assertEquals(3, compartment.getItems().size());
         assertEquals(item, compartment.getItems().get(0));
     }
 }
