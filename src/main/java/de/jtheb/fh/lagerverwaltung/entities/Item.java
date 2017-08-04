@@ -50,4 +50,15 @@ public class Item {
     public int getVolume() {
         return depth * width * height;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "articleNr='" + articleNr + '\'' +
+                ", name='" + name + '\'' +
+                ", height=" + height +
+                ", width=" + width +
+                ", depth=" + depth +
+                '}';
+    }
 }

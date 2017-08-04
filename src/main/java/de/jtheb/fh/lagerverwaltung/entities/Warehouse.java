@@ -58,4 +58,11 @@ public class Warehouse {
             add(shelf);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Warehouse{" +
+                "shelves=" + shelves +
+                '}';
+    }
 }

@@ -63,4 +63,11 @@ public class Shelf {
             add(compartment);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Shelf{" +
+                "compartments=" + compartments +
+                '}';
+    }
 }
